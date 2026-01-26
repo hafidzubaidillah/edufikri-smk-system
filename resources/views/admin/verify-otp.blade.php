@@ -36,6 +36,9 @@
         @if(session('otpSent'))
             <div class="alert alert-success text-center">{{ session('otpSent') }}</div>
         @endif
+        @if(session('otp_plain') && (app()->environment('local') || config('app.debug')))
+            <div class="alert alert-info text-center">DEV OTP: <strong>{{ session('otp_plain') }}</strong></div>
+        @endif
 
         <form method="POST" action="{{ route('admin.otp.verify.submit') }}" id="otpForm">
             @csrf

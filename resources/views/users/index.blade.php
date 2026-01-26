@@ -5,12 +5,12 @@
 @section('content')
 <div class="container">
     <!-- Loader Overlay -->
-    <div id="loader">
+    <div id="loader" style="display: none;">
         <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
             <span class="visually-hidden">Loading...</span>
         </div>
         <div class="mt-3 text-primary" id="loaderMessage">
-            Loading records...
+            Memproses...
         </div>
     </div>
 
@@ -18,13 +18,12 @@
     <!-- Sticky header -->
     <div class="sticky-top bg-white shadow-sm py-2 mb-0">
         <div class="d-flex flex-column flex-md-row flex-wrap justify-content-between align-items-start align-items-md-center">
-            <h5 class="mb-2 mb-md-0">Registered Users</h5>
+            <h5 class="mb-2 mb-md-0">
+                <i class="fas fa-users me-2"></i>Manajemen User
+            </h5>
             <div class="d-flex flex-wrap gap-2">
-                <!-- <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">
-                    <i class="bi bi-house-door-fill"></i>
-                </a> -->
                 <a href="{{ route('admin.register.form') }}" class="btn btn-primary btn-sm">
-                    <i class="bi bi-person-plus-fill"></i> Register
+                    <i class="fas fa-user-plus me-1"></i> Tambah User
                 </a>
             </div>
         </div>
@@ -39,11 +38,11 @@
                 <tr>
                     <th style="width:1%"><input type="checkbox" id="selectAll"></th>
                     <th style="width:1%">No.</th>
-                    <th>Name</th>
+                    <th>Nama</th>
                     <th>Email</th>
                     <th>Role</th>
-                    <th>Date Registered</th>
-                    <th class="text-center" style="width:120px;">Actions</th>
+                    <th>Tanggal Daftar</th>
+                    <th class="text-center" style="width:120px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,19 +54,38 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->getRoleNames()->first() ?? 'No Role' }}</td>
                         <td>{{ $user->created_at->format('M d, Y h:i A') }}</td>
-                        <td class="text-center">
-                            <!-- Edit Button -->
-                            <button type="button" class="btn btn-sm btn-outline-secondary me-1" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" form="delete-user-{{ $user->id }}"
-                                onclick="return confirm('Delete {{ $user->name }}?')">
-                                <i class="bi bi-trash3-fill"></i>
-                            </button>
+                        <td class="text-center action-buttons">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <!-- View Details Button -->
+                                <a href="{{ route('admin.users.passwords') }}" 
+                                   class="btn btn-info" title="Lihat Password">
+                                    <i class="fas fa-key"></i>
+                                </a>
+                                
+                                <!-- Edit Button -->
+                                <button type="button" 
+                                        class="btn btn-warning" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editUserModal{{ $user->id }}"
+                                        title="Edit User">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <!-- Delete Button -->
+                                <button type="button" 
+                                        class="btn btn-danger" 
+                                        onclick="deleteUser({{ $user->id }}, '{{ $user->name }}')"
+                                        title="Hapus User">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-center">No users found.</td></tr>
+                    <tr><td colspan="7" class="text-center py-4">
+                        <i class="fas fa-users text-muted mb-2" style="font-size: 2rem;"></i>
+                        <p class="text-muted mb-0">Tidak ada user ditemukan</p>
+                    </td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -75,14 +93,14 @@
         <!-- Summary & Send Button -->
         <div class="d-flex justify-content-between align-items-center mt-3" style="font-size: 0.85rem;">
             <div class="small text-muted">
-                Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }} entries
+                Menampilkan {{ $users->firstItem() }} sampai {{ $users->lastItem() }} dari {{ $users->total() }} user
             </div>
             <div class="pagination-wrapper small">
                 {{ $users->links() }}
             </div>
             <div>
-                <button type="submit" id="sendEmailBtn" class="btn btn-primary btn-sm">
-                    <i class="bi bi-send-fill"></i> Send Email to Selected
+                <button type="submit" id="sendEmailBtn" class="btn btn-success btn-sm">
+                    <i class="fas fa-paper-plane me-1"></i> Kirim Email ke Yang Dipilih
                 </button>
             </div>
         </div>
@@ -97,20 +115,28 @@
                     @method('PUT')
                     <div class="modal-content border border-1 border-primary rounded-4 shadow">
                         <div class="modal-header">
-                            <h5 class="modal-title">Edit User</h5>
+                            <h5 class="modal-title">
+                                <i class="fas fa-edit me-2"></i>Edit User
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label>Name</label>
+                                <label class="form-label">
+                                    <i class="fas fa-user me-2"></i>Nama Lengkap
+                                </label>
                                 <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
                             </div>
                             <div class="mb-3">
-                                <label>Email</label>
+                                <label class="form-label">
+                                    <i class="fas fa-envelope me-2"></i>Email
+                                </label>
                                 <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
                             </div>
                             <div class="mb-3">
-                                <label>Role</label>
+                                <label class="form-label">
+                                    <i class="fas fa-user-tag me-2"></i>Role/Peran
+                                </label>
                                 <select name="role" class="form-select" required>
                                     @foreach(Spatie\Permission\Models\Role::all() as $role)
                                         <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
@@ -122,12 +148,13 @@
                         </div>
                         <!-- Modal Footer Buttons -->
                         <div class="modal-footer border-top-0 d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-primary rounded-pill px-4"
-                                style="background-color: transparent !important; border-color: #0d6efd; color: #0d6efd;"
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4"
                                 data-bs-dismiss="modal">
-                                Cancel
+                                <i class="fas fa-times me-1"></i>Batal
                             </button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-4">Update</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                <i class="fas fa-save me-1"></i>Update
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -148,17 +175,70 @@
 @push('head')
     <style>
         #loader {
-            display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(255,255,255,0.8);
             z-index: 9999;
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
+        }
+        
+        .action-buttons .btn-group {
+            display: flex;
+            gap: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 0.375rem;
+        }
+
+        .action-buttons .btn {
+            min-width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.2s ease;
+        }
+
+        .action-buttons .btn:first-child {
+            border-top-left-radius: 0.375rem;
+            border-bottom-left-radius: 0.375rem;
+        }
+
+        .action-buttons .btn:last-child {
+            border-top-right-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+            border-right: none;
+        }
+
+        .action-buttons .btn i {
+            font-size: 14px;
+        }
+
+        .action-buttons .btn:hover {
+            transform: translateY(-1px);
+            z-index: 1;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+            color: white;
         }
     </style>
 @endpush
@@ -190,32 +270,48 @@
 
 
 <script>
-    const loader = document.getElementById('loader');
-    const loaderMessage = document.getElementById('loaderMessage');
-    const form = document.getElementById('sendMailForm');
-    const sendEmailBtn = document.getElementById('sendEmailBtn');
+    document.addEventListener('DOMContentLoaded', function() {
+        const loader = document.getElementById('loader');
+        const loaderMessage = document.getElementById('loaderMessage');
+        const form = document.getElementById('sendMailForm');
+        const sendEmailBtn = document.getElementById('sendEmailBtn');
 
-    // Trigger loader ONLY when the send email button is clicked
-    sendEmailBtn.addEventListener('click', function () {
-        loaderMessage.textContent = 'Sending welcome email...';
-        loader.style.display = 'flex';
-    });
+        // Hide loader immediately when DOM is loaded
+        if (loader) {
+            loader.style.display = 'none';
+        }
 
-    // Show loader when the page first starts loading
-    window.addEventListener('DOMContentLoaded', () => {
-        loaderMessage.textContent = 'Loading records...';
-        loader.style.display = 'flex';
-    });
+        // Show loader only when sending email
+        if (sendEmailBtn) {
+            sendEmailBtn.addEventListener('click', function () {
+                if (loaderMessage) {
+                    loaderMessage.textContent = 'Mengirim email...';
+                }
+                if (loader) {
+                    loader.style.display = 'flex';
+                }
+            });
+        }
 
-    // Hide loader once everything is rendered
-    window.addEventListener('load', () => {
-        loader.style.display = 'none';
+        // Checkbox logic
+        const selectAllCheckbox = document.getElementById('selectAll');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function () {
+                document.querySelectorAll('.recipient-checkbox')
+                        .forEach(cb => cb.checked = this.checked);
+            });
+        }
     });
-
-    // Checkbox logic
-    document.getElementById('selectAll').addEventListener('change', function () {
-        document.querySelectorAll('.recipient-checkbox')
-                .forEach(cb => cb.checked = this.checked);
-    });
+    
+    // Delete user function
+    function deleteUser(userId, userName) {
+        if (confirm(`Apakah Anda yakin ingin menghapus user ${userName}? Tindakan ini tidak dapat dibatalkan.`)) {
+            // Submit the hidden form
+            const form = document.getElementById(`delete-user-${userId}`);
+            if (form) {
+                form.submit();
+            }
+        }
+    }
 </script>
 @endpush

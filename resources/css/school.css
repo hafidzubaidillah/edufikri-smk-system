@@ -1,0 +1,388 @@
+/* SMK IT Ihsanul Fikri Custom Styles */
+
+:root {
+    --school-green: #1a5f1a;
+    --school-yellow: #ffc107;
+    --school-dark-green: #155015;
+    --school-light-green: #e8f5e8;
+    --school-light-yellow: #fff8e1;
+}
+
+/* School Color Scheme */
+.school-primary {
+    background-color: var(--school-green);
+    color: white;
+}
+
+.school-secondary {
+    background-color: var(--school-yellow);
+    color: #333;
+}
+
+.school-gradient {
+    background: linear-gradient(135deg, var(--school-green), var(--school-yellow));
+}
+
+.text-school-green {
+    color: var(--school-green);
+}
+
+.text-school-yellow {
+    color: var(--school-yellow);
+}
+
+.bg-school-green {
+    background-color: var(--school-green);
+}
+
+.bg-school-yellow {
+    background-color: var(--school-yellow);
+}
+
+.bg-school-light-green {
+    background-color: var(--school-light-green);
+}
+
+.bg-school-light-yellow {
+    background-color: var(--school-light-yellow);
+}
+
+/* Islamic Elements */
+.islamic-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffc107' fill-opacity='0.1'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Logo Styling */
+.school-logo {
+    width: 80px;
+    height: 80px;
+    background: var(--school-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(26, 95, 26, 0.3);
+}
+
+.school-logo i {
+    font-size: 2rem;
+    color: white;
+}
+
+/* Card Styles */
+.school-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.school-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.school-card-header {
+    background: var(--school-gradient);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.school-card-body {
+    padding: 2rem;
+}
+
+/* Program Cards */
+.program-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.program-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--school-gradient);
+}
+
+/* Facility Cards */
+.facility-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.facility-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.facility-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--school-gradient);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.facility-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* News Cards */
+.news-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.news-image {
+    height: 200px;
+    background: var(--school-gradient);
+    position: relative;
+}
+
+.news-category {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: white;
+    color: var(--school-green);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn-school-primary {
+    background: var(--school-gradient);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-school-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26, 95, 26, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-school-outline {
+    background: transparent;
+    color: var(--school-green);
+    border: 2px solid var(--school-green);
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-school-outline:hover {
+    background: var(--school-green);
+    color: white;
+    text-decoration: none;
+}
+
+/* Statistics */
+.stat-card {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--school-green);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #666;
+    font-weight: 500;
+}
+
+/* Hero Section */
+.hero-section {
+    background: var(--school-gradient);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50m-40 0a40 40 0 1 1 80 0a40 40 0 1 1 -80 0' stroke='%23ffffff' stroke-width='1' fill='none' opacity='0.1'/%3E%3C/svg%3E") repeat;
+    opacity: 0.1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Navigation */
+.navbar-school {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.navbar-brand .logo {
+    width: 40px;
+    height: 40px;
+    background: var(--school-gradient);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-brand .logo i {
+    color: white;
+    font-size: 1.25rem;
+}
+
+.navbar-nav .nav-link {
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--school-green);
+}
+
+/* Footer */
+.footer-school {
+    background: #1a1a1a;
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
+.footer-section h5 {
+    color: var(--school-yellow);
+    margin-bottom: 1rem;
+}
+
+.footer-section a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: var(--school-yellow);
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--school-green);
+    color: white;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: var(--school-yellow);
+    color: #333;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 80vh;
+        padding: 2rem 0;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .school-card-header,
+    .school-card-body {
+        padding: 1.5rem;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slide-in-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.6s ease;
+}
+
+.slide-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide-in-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.6s ease;
+}
+
+.slide-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}

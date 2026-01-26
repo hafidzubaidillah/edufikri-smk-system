@@ -6,11 +6,6 @@
         </p>
     </div>
 
-    <!-- Send Email Verification Form (Hidden) -->
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
-
     <!-- Update Profile Form -->
     <form method="post" action="{{ route('admin.profile.update') }}">
         @csrf
@@ -42,21 +37,6 @@
             @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
-
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div class="form-text mt-2">
-                    {{ __('Your email address is unverified.') }}
-                    <button type="submit" form="send-verification" class="btn btn-link p-0 m-0 align-baseline">
-                        {{ __('Click here to re-send the verification email.') }}
-                    </button>
-                </div>
-
-                @if (session('status') === 'verification-link-sent')
-                    <div class="alert alert-success mt-2 p-2 small">
-                        {{ __('A new verification link has been sent to your email address.') }}
-                    </div>
-                @endif
-            @endif
         </div>
 
         <div class="d-flex align-items-center gap-3">

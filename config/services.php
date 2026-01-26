@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    // Email verification settings
+    'email_verification' => [
+        'expire_minutes' => env('EMAIL_VERIFICATION_EXPIRE_MINUTES', 60),
+        'throttle_attempts' => env('EMAIL_VERIFICATION_THROTTLE_ATTEMPTS', 5),
+        'throttle_decay_minutes' => env('EMAIL_VERIFICATION_THROTTLE_DECAY', 60),
+    ],
+
 ];

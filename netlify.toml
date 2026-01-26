@@ -1,0 +1,15 @@
+[build]
+  command = "composer install --no-dev && php artisan config:cache"
+  publish = "public"
+
+[build.environment]
+  PHP_VERSION = "8.2"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.php"
+  status = 200
+
+[context.production.environment]
+  APP_ENV = "production"
+  APP_DEBUG = "false"

@@ -18,15 +18,31 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-         if ($request->routeIs('admin.profile.edit')) {
+        $user = $request->user();
+        
+        // Check if this is admin profile route
+        if ($request->routeIs('admin.profile.edit')) {
             return view('admin.profile.edit', [
-                'user' => $request->user(),
+                'user' => $user,
             ]);
         }
 
-        // Default Breeze view
+        // Route to appropriate profile view based on user role
+        if ($user->hasRole('admin')) {
+            return view('profile.admin-edit', [
+                'user' => $user,
+            ]);
+        } elseif ($user->hasRole('learner')) {
+            // Redirect to learner profile controller
+            return redirect()->route('learner.profile.edit');
+        } elseif ($user->hasRole('employee')) {
+            // Redirect to teacher profile controller
+            return redirect()->route('teacher.profile.edit');
+        }
+
+        // Fallback to default view
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 
@@ -43,10 +59,12 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        // Redirect to the appropriate profile route
-        $redirectRoute = $request->routeIs('admin.profile.update')
-            ? 'admin.profile.edit'
-            : 'profile.edit';
+        // Redirect to the appropriate profile route based on current route or user role
+        if ($request->routeIs('admin.profile.update')) {
+            $redirectRoute = 'admin.profile.edit';
+        } else {
+            $redirectRoute = 'profile.edit';
+        }
 
         return Redirect::route($redirectRoute)->with('status', 'profile-updated');
     }

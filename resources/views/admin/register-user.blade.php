@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Register User | LEMS')
+@section('title', 'Register User | EDUFIKRI')
 
 @section('content')
 <div class="container mt-3">

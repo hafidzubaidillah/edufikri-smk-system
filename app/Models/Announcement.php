@@ -20,4 +20,9 @@ class Announcement extends Model
         return $this->hasMany(AnnouncementTarget::class);
     }
 
+    public function logs()
+    {
+        return $this->hasMany(AnnouncementLog::class);
+    }
+
 }

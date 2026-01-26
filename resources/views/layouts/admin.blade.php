@@ -1,628 +1,223 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <title>@yield('title', 'LEMS') | Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <title>{{ config('app.name', 'Laravel') }} - Admin Panel</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Allow page-specific styles/scripts to be injected -->
-    @stack('head')
-    @stack('styles')
- <style>
-      /* body { min-height: 100vh; display: flex; }
-      .sidebar {
-        width: 200px;
-        background: #343a40;
-        color: white;
-        transition: width 0.3s ease;
-      } */
-      html, body {
-          height: 100%;
-          margin: 0;
-          overflow: hidden;
-      }
-
-      body {
-          display: flex;
-          font-family: sans-serif;
-      }
-
-      .sidebar {
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        overflow-y: auto;
-        overflow: visible; /* allow tooltip to show outside */
-        z-index: 1000;     /* make sure it's on top */
-        background: #343a40;
-        color: white;
-        transition: width 0.3s ease;
-      }
-
-      .content-wrapper {
-          margin-left: 200px; /* same as sidebar width */
-          transition: margin-left 0.3s ease;
-          flex-grow: 1;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-      }
-
-      .content {
-        flex-grow: 1;
-        padding: 2rem;
-        /* overflow: auto; */
-        overflow-y: auto;
-        transform: translateY(10px); /* slide up effect */
-        transition: opacity 0.4s ease, transform 0.4s ease;
-      }
-
-      .sidebar a { color: #adb5bd; text-decoration: none; }
-      .sidebar a.active,
-      .sidebar a:hover { background: #495057; color: white; }
-      .content-wrapper { flex-grow: 1; display: flex; flex-direction: column; }
-      .topbar {
-        height: 40px;              /* force a shorter bar */
-        padding: 0.25rem 1rem;     /* less vertical padding */
-        background: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
-      }
-
-      .sidebar.collapsed {
-        width: 60px;
-      }
-
-      .sidebar.collapsed ~ .content-wrapper {
-          margin-left: 60px;
-      }
-
-      .sidebar .toggle-btn {
-        background: #222;
-        color: white;
-        border: none;
-        padding: 10px;
-        text-align: right;
-        cursor: pointer;
-      }
-
-      .menu {
-        flex: 1;
-        padding: 10px 0;
-      }
-
-      .menu-item {
-        padding: 6px 12px;
-        font-size: 14px;
-        line-height: 1.2;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        position: relative;
-        transition: padding 0.3s ease, justify-content 0.3s ease;
-      }
-
-      .menu-item:hover {
-        background-color: #333;
-      }
-
-      .menu-item i {
-        width: 20px;
-        text-align: center;
-      }
-
-      /* Prevent span overflow in general */
-      .menu-item span {
-        display: inline-block;
-        opacity: 1;
-        width: auto;
-        overflow: hidden;
-        white-space: nowrap;
-        transition: opacity 0.3s ease, width 0.3s ease;
-      }
-
-      /* Hide labels when sidebar is collapsed */
-      .sidebar.collapsed .menu-item span {
-        opacity: 0;
-        width: 0;
-      }
-
-      /* Center icons */
-      .sidebar.collapsed .menu-item {
-        justify-content: center;
-        gap: 0;
-        padding-left: 0.5rem;
-        padding-right: 0;
-      }
-
-
-      /* Tooltip on hover */
-      .sidebar.collapsed .menu-item:hover::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        top: 50%;
-        left: calc(100% + 8px);
-        transform: translateY(-50%);
-        background: #333;
-        color: #fff;
-        padding: 6px 10px;
-        font-size: 12px;
-        border-radius: 4px;
-        white-space: nowrap;
-        z-index: 1000;
-        pointer-events: none;
-      }
-
-
-      .system-logo {
-        max-height: 80px;
-        transition: max-height 0.3s ease, transform 0.3s ease;
-      }
-
-      .sidebar.collapsed .system-logo {
-        max-height: 40px !important;
-        transform: scale(0.9);
-      }
-
-      .system-name {
-        transition: opacity 0.3s ease, width 0.3s ease;
-        white-space: nowrap;
-        overflow: hidden;
-      }
-      .sidebar.collapsed .system-name {
-         opacity: 0;
-         width: 0;
-      }
-
-
-      .main-content {
-        flex: 1;
-        padding: 20px;
-        color: white;
-      }
-      .topbar {
-        /* background: linear-gradient(to right, #00C6C2, #33A9E5,rgb(138, 57, 239)); */
-      }
-
-      /*.sticky-header {
-          position: sticky;
-          top: 0;
-          z-index: 1030; /* higher than most components */
-          /*background-color: #fff; /* needed to avoid transparency */
-          /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      } */
-
-      .topbar h3 {
-        margin-bottom: 1;          
-        /* font-size: 1rem;*/
-      }
-      .topbar .btn {
-        padding: 0.25rem 0.5rem;   /* smaller button padding */
-      }
-      .topbar .btn i {
-        font-size: 1.25rem;        /* ~20px icons */
-      }
-
-      .text-ellipsis {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-
-      /* Compact table style */
-      .table-compact th,
-      .table-compact td {
-          padding: 0.2rem 0.4rem;       /* Minimal vertical and horizontal padding */
-          font-size: 0.85rem;           /* Optional: adjust font size */
-          line-height: 1.2;             /* Reduce space inside each row */
-          vertical-align: middle;       /* Align text vertically */
-      }
-
-      dialog, .modal-backdrop {
-        display: none !important;
-      }
-
-      #notificationDrawer {
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-          border-left: 1px solid #0d6efd !important; /* Blue border */
-      }
-
-    </style>
-
-    @stack('head')
-</head>
-<body>
-
-  <!-- Sidebar -->
-  <nav class="sidebar d-flex flex-column p-3" id="sidebar">
-    <div class="text-center">
-      <!-- Logo -->
-      <img
-        src="{{ asset('images/developer.png') }}"
-        alt="LEMS Logo"
-        class="system-logo mx-auto d-block mb-3"
-        style="max-height: 80px;"
-      >
-
-      <!-- System Name -->
-      <h4 class="system-name text-white mb-4">LEMS</h4>
-    </div>
-
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item mb-1">
-        <a href="{{ route('admin.dashboard') }}"
-          class="menu-item nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-          data-tooltip="Dashboard">
-          <i class="bi bi-speedometer2 me-2"></i><span> Dashboard</span>
-        </a>
-      </li>
-      <li class="nav-item mb-1">
-          <a href="{{ route('admin.learners.index') }}"
-            class="menu-item nav-link {{ request()->routeIs('admin.learners.*') ? 'active' : '' }}"
-            data-tooltip="Manage Learners">
-              <i class="bi bi-people-fill me-2"></i><span> Learners</span>
-          </a>
-      </li>
-      <li class="nav-item mb-1">
-          <a href="#"
-              class="menu-item nav-link {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}"
-              data-tooltip="Manage Employees">
-              <i class="bi bi-person-badge-fill me-2"></i><span> Employees</span>
-          </a>
-      </li>
-      <li class="nav-item mb-1">
-          <a href="{{ route('admin.attendance.index') }}"
-              class="menu-item nav-link {{ request()->routeIs('admin.attendance.*') ? 'active' : '' }}"
-              data-tooltip="View Attendance Logs">
-              <i class="bi bi-clipboard-check-fill me-2"></i><span> Attendance</span>
-          </a>
-      </li>
-      <li class="nav-item mb-1">
-          <a class="menu-item nav-link d-flex justify-content-between align-items-center {{ request()->routeIs('admin.announcements.*') ? '' : 'collapsed' }}"
-              data-bs-toggle="collapse"
-              href="#announcementSubmenu"
-              role="button"
-              aria-expanded="{{ request()->routeIs('admin.announcements.*') ? 'true' : 'false' }}"
-              data-tooltip="Manage Announcements">
-              <span><i class="bi bi-megaphone-fill me-2"></i> Announce</span>
-              <i class="bi bi-chevron-down small"></i>
-          </a>
-
-          <div class="collapse {{ request()->routeIs('admin.announcements.*') ? 'show' : '' }}" id="announcementSubmenu">
-              <ul class="nav flex-column ms-4 mt-1">
-                  <li class="nav-item">
-                      @if(Route::has('admin.announcements.index'))
-                          <a href="{{ route('admin.announcements.index') }}"
-                            class="menu-item nav-link {{ request()->routeIs('admin.announcements.index') ? 'active' : '' }}"
-                            data-tooltip="Compose Announcement">
-                              Compose
-                          </a>
-                      @else
-                          <a href="#" class="menu-item nav-link disabled" data-tooltip="Coming soon">Compose</a>
-                      @endif
-                  </li>
-                  <li class="nav-item">
-                      @if(Route::has('admin.announcements.sendForm'))
-                          <a href="{{ route('admin.announcements.sendForm') }}"
-                            class="menu-item nav-link {{ request()->routeIs('admin.announcements.sendForm') ? 'active' : '' }}"
-                            data-tooltip="Send Announcement">
-                              Send
-                          </a>
-                      @else
-                          <a href="#" class="menu-item nav-link disabled" data-tooltip="Coming soon">Send</a>
-                      @endif
-                  </li>
-                  <li class="nav-item">
-                      @if(Route::has('admin.announcements.logs'))
-                          <a href="{{ route('admin.announcements.logs') }}"
-                            class="menu-item nav-link {{ request()->routeIs('admin.announcements.logs') ? 'active' : '' }}"
-                            data-tooltip="View Logs">
-                              Logs
-                          </a>
-                      @else
-                          <a href="#" class="menu-item nav-link disabled" data-tooltip="Coming soon">Logs</a>
-                      @endif
-                  </li>
-              </ul>
-          </div>
-      </li>
-      <!-- <li class="nav-item mb-1">
-          <a href="{{ route('admin.register.form') }}"
-              class="menu-item nav-link {{ request()->routeIs('admin.register.form') ? 'active' : '' }}"
-              data-tooltip="Register">
-              <i class="bi bi-person-plus-fill me-2"></i><span> Register</span>
-          </a>
-      </li> -->
-      <li class="nav-item mb-1">
-        <a href="{{ route('users.index') }}"
-          class="menu-item nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
-          data-tooltip="Registered Users">
-          <i class="bi bi-people-fill me-2"></i><span> Registered Users</span>
-        </a>
-      </li>
-      <li class="nav-item mb-1">
-        <a href="{{ route('email.logs') }}"
-          class="menu-item nav-link {{ request()->routeIs('email.logs') ? 'active' : '' }}"
-          data-tooltip="Email Audit Log">
-          <i class="bi bi-clipboard-check-fill me-2"></i><span> Email Audit Log</span>
-        </a>
-      </li>
-      <li class="nav-item mb-1">
-          <a href="{{ route('email.custom.form') }}"
-            class="menu-item nav-link {{ request()->routeIs('email.custom.form') ? 'active' : '' }}"
-            data-tooltip="Custom Email">
-              <i class="bi bi-chat-square-text-fill me-2"></i><span> Custom Email</span>
-          </a>
-      </li>
-      <li class="nav-item mb-1">
-          <a href="#"
-            class="menu-item nav-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}"
-            data-tooltip="Reports">
-              <i class="bi bi-file-earmark-bar-graph me-2"></i><span> Reports</span>
-          </a>
-      </li>
-      <li class="nav-item mb-1">
-          <a href="#"
-            class="menu-item nav-link {{ request()->routeIs('admin.help') ? 'active' : '' }}"
-            data-tooltip="Help">
-              <i class="bi bi-question-circle-fill me-2"></i><span> Help</span>
-          </a>
-      </li>
-      <!-- <li class="nav-item">
-        <a href="{{ route('users.index') }}"
-          class="menu-item nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}"
-          data-tooltip="LEMS">
-          <i class="bi bi-envelope-fill me-2"></i><span> LEMS</span>
-        </a>
-      </li> -->
-      <li class="nav-item">
-        <a href="#"
-          class="menu-item nav-link {{ request()->routeIs('about') ? 'active' : '' }}"
-          data-tooltip="About"
-          data-bs-toggle="modal"
-          data-bs-target="#aboutModal">
-          <i class="bi bi-info-circle-fill me-2"></i><span> About</span>
-        </a>
-      </li>
-    </ul>
     
-    <!-- <hr>
-    <div>
-        <a href="#" 
-        class="menu-item d-flex align-items-center text-white text-decoration-none rounded px-4 py-1"
-        data-bs-toggle="modal"
-        data-bs-target="#logoutModal"
-        data-tooltip="Logout">
-        <i class="bi bi-box-arrow-right me-2"></i><span> Logout</span>
-      </a>
-    </div> -->
-  </nav>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- Logout Confirmation Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border border-1 border-primary rounded-4 shadow">
-      
-      <div class="modal-header py-2 px-3">
-        <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      
-      <div class="modal-body">
-        Are you sure you want to logout?
-      </div>
-      
-      <div class="modal-footer">
-        <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          
-          <!-- Modern-style Cancel button -->
-          <button type="button"
-                  class="btn btn-sm border border-primary text-primary bg-white"
-                  data-bs-dismiss="modal">
-            Cancel
-          </button>
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-          <!-- Primary-style Logout button -->
-          <button type="submit" class="btn btn-primary btn-sm">
-            Logout
-          </button>
-        </form>
-      </div>
+    <style>
+        :root {
+            --admin-primary: #dc3545;
+            --admin-secondary: #6c757d;
+            --admin-success: #198754;
+            --admin-info: #0dcaf0;
+            --admin-warning: #ffc107;
+            --admin-danger: #dc3545;
+            --admin-dark: #212529;
+            --admin-light: #f8f9fa;
+        }
 
-    </div>
-  </div>
-</div>
+        body {
+            font-family: 'Figtree', sans-serif;
+            background-color: #f5f5f5;
+        }
 
+        .admin-sidebar {
+            background: linear-gradient(135deg, var(--admin-danger) 0%, #b02a37 100%);
+            min-height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
 
+        .admin-sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 20px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
 
-   <!-- Content + Topbar Wrapper -->
-  <div class="content-wrapper">
-      
-    <!-- Topbar -->
-    <nav class="topbar d-flex align-items-center m-0 sticky-header" style="padding: 10px 16px;">
-      <!-- Sidebar Toggle -->
-      <button id="toggleSidebar" class="toggle-btn btn btn-outline-secondary me-2 m-0" onclick="toggleSidebar()" 
-              style="padding: 2px 6px; font-size: 0.75rem; line-height: 1;">
-        <i class="bi bi-list"></i>
-      </button>
+        .admin-sidebar .nav-link:hover,
+        .admin-sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
 
+        .admin-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--admin-danger);
+        }
 
-      <!-- Page Title -->
-      <h3 class="mb-0 text-truncate text-ellipsis">
-        Admin Dashboard
-      </h3>
+        .admin-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
 
-      <!-- Right-side controls -->
-      <div class="ms-auto d-flex align-items-center gap-2">
-          <!-- Notification Bell -->
-          <button class="btn position-relative" onclick="toggleNotifications()">
-              <i class="bi bi-bell"></i>
-          </button>
+        .admin-card:hover {
+            transform: translateY(-5px);
+        }
 
-          <!-- User Dropdown -->
-          <div class="dropdown">
-              <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person-circle fs-5"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
-                  <li class="dropdown-item-text fw-semibold">
-                      {{ Auth::user()->name }}
-                      <br>
-                      <small class="text-muted">{{ Auth::user()->email }}</small>
-                      <small class="text-primary text-uppercase">
-                        {{ Auth::user()->getRoleNames()->first() ?? 'No role assigned' }}
-                      </small>
-                  </li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li>
-                      <!-- <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                          <i class="bi bi-person-lines-fill me-2"></i>Profile
-                      </a> -->
-                      <a class="dropdown-item" href="{{ route('admin.profile.edit') }}">
-                          <i class="bi bi-person-lines-fill me-2"></i>Profile
-                      </a>
-                  </li>
-                  <li>
-                      <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                          <i class="bi bi-box-arrow-right me-2"></i>Logout
-                      </a>
-                  </li>
-              </ul>
-          </div>
-      </div>
-    </nav>
+        .admin-btn-primary {
+            background: linear-gradient(135deg, var(--admin-danger) 0%, #b02a37 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
 
-    <!-- Notification Drawer -->
-    <div id="notificationDrawer" class="position-fixed top-0 end-0 bg-white border-start shadow h-100 p-3" style="width: 300px; z-index: 1050; transform: translateX(100%); transition: transform 0.3s;">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">Notifications</h5>
-            <button class="btn-close" onclick="toggleNotifications()"></button>
-        </div>
-        <div>
-            <p class="small text-danger">No new notifications.</p>
-            <!-- Dynamic notifications can be listed here -->
-        </div>
-    </div>
+        .admin-stats-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            border-radius: 15px;
+        }
 
-    <!-- About Modal -->
-    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content border border-1 border-primary rounded-4 shadow">
-              
-            <div class="modal-header">
-                <h5 class="modal-title" id="aboutModalLabel">About</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-              
-              <div class="modal-body">
-                <!-- System Info -->
-                <h6>System Features & Purpose</h6>
-                <ul class="small mb-4">
-                  <li>Sends batch or individual emails to selected users</li>
-                  <li>Maintains an audit log of every sent email (recipient, subject, timestamp)</li>
-                  <li>Filter, search and paginate through email logs</li>
-                  <li>Register new users directly from the admin dashboard</li>
-                  <li>Real-time notifications for successful or failed sends</li>
-                </ul>
-                <p class="small">
-                  This application streamlines your communication workflow by letting you compose, send, and track emails—all from one intuitive dashboard.
-                </p>
+        .admin-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
 
-                <!-- Developer Info -->
-                <div class="text-center">
-                  <img
-                    src="{{ asset('images/developer.png') }}"
-                    alt="App Mailer Logo"
-                    class="mx-auto d-block mb-3"
-                    style="max-height: 80px;"
-                  >
-                  <h6>Developers</h6><br>
-                  <p class="small mb-0">
-                    <strong>Leonard T. Domingo</strong> <br> 
-                    <strong>Allyssa Mae T. Ligsay</strong> <br> 
-                    <strong>Airiz Krizzle Placido </strong> <br> 
-                    <strong>Mary Ann S. Cabagui</strong> <br> 
-                    <strong>Karylle Mia Abella</strong> <br> 
-                    <strong>Alexis Jane Labinay Tabunan</strong> <br> 
-                    <strong>Mariz Jocel L. Tomas</strong> <br> 
-                    <strong>David John Caliboso</strong> <br> 
-                    Bachelor of Science in Information Technology<br>
-                    <a href="mailto:leonardtdomingovida@gmail.com">lems@gmail.com</a>
-                  </p>
+<body class="font-sans antialiased">
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="admin-sidebar" style="width: 280px;">
+            <div class="p-4">
+                <div class="admin-logo mb-4 d-flex align-items-center">
+                    <img src="{{ asset('images/logo-sekolah.png') }}" alt="Logo SMK IT Ihsanul Fikri" 
+                         style="width: 40px; height: 40px; object-fit: contain;" class="me-2">
+                    <div>
+                        <div style="font-size: 1.2rem; font-weight: bold; line-height: 1.2;">EDUFIKRI</div>
+                        <small style="font-size: 0.75rem; opacity: 0.8;">Admin Panel</small>
+                    </div>
                 </div>
-              </div>
-              
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-              </div>
-              
+                
+                <!-- User Info -->
+                <div class="text-center mb-4 p-3" style="background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <div class="mb-2">
+                        <i class="fas fa-user-shield fa-2x text-white"></i>
+                    </div>
+                    <h6 class="text-white mb-1">{{ Auth::user()->name }}</h6>
+                    <small class="text-white-50">Administrator</small>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="nav flex-column">
+                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.classes.*') ? 'active' : '' }}" href="{{ route('admin.classes.index') }}">
+                        <i class="fas fa-chalkboard me-2"></i>Manajemen Kelas
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.learners.*') ? 'active' : '' }}" href="{{ route('admin.learners.index') }}">
+                        <i class="fas fa-users me-2"></i>Data Siswa
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.teachers.*') ? 'active' : '' }}" href="{{ route('admin.teachers.index') }}">
+                        <i class="fas fa-chalkboard-teacher me-2"></i>Data Guru
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.subjects.*') ? 'active' : '' }}" href="{{ route('admin.subjects.index') }}">
+                        <i class="fas fa-book me-2"></i>Mata Pelajaran
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.majors.*') ? 'active' : '' }}" href="{{ route('admin.majors.index') }}">
+                        <i class="fas fa-graduation-cap me-2"></i>Jurusan
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.attendance.*') ? 'active' : '' }}" href="{{ route('admin.attendance.index') }}">
+                        <i class="fas fa-calendar-check me-2"></i>Absensi
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.announcements.*') ? 'active' : '' }}" href="{{ route('admin.announcements.index') }}">
+                        <i class="fas fa-bullhorn me-2"></i>Pengumuman
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
+                        <i class="fas fa-user-cog me-2"></i>Manajemen User
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('email.*') ? 'active' : '' }}" href="{{ route('email.logs') }}">
+                        <i class="fas fa-envelope me-2"></i>Log Email
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.social-media.*') ? 'active' : '' }}" href="{{ route('admin.social-media.index') }}">
+                        <i class="fas fa-share-alt me-2"></i>Sosial Media
+                    </a>
+                    <a class="nav-link {{ request()->routeIs('admin.users.passwords') ? 'active' : '' }}" href="{{ route('admin.users.passwords') }}">
+                        <i class="fas fa-key me-2"></i>Kelola Password
+                    </a>
+                    
+                    <hr class="my-3" style="border-color: rgba(255,255,255,0.2);">
+                    
+                    <a class="nav-link {{ request()->routeIs('admin.profile.*') ? 'active' : '' }}" href="{{ route('admin.profile.edit') }}">
+                        <i class="fas fa-user-edit me-2"></i>Profil
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                        @csrf
+                        <button type="submit" class="nav-link border-0 bg-transparent w-100 text-start">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </button>
+                    </form>
+                </nav>
             </div>
-          </div>
         </div>
 
-    <!-- Main Content -->
-    <div class="content py-0">
-      @yield('content')
+        <!-- Main Content -->
+        <div class="flex-grow-1">
+            <!-- Header -->
+            <header class="admin-header p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0 text-dark">
+                        <i class="fas fa-shield-alt text-danger me-2"></i>
+                        Panel Administrator
+                    </h4>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-danger me-3">
+                            <i class="fas fa-crown me-1"></i>ADMIN
+                        </span>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-danger dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('admin.profile.edit') }}">
+                                    <i class="fas fa-user-edit me-2"></i>Profil
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="p-4">
+                @yield('content')
+            </main>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center py-3 mt-auto bg-light" style="font-size: 0.85rem;">
-      <div class="container">
-        <span class="text-muted">© {{ date('Y') }} Learner and Employee Management System. All rights reserved.</span>
-      </div>
-    </footer>
-
-  </div>
-  <script>
-    // Sidebar toggle logic
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('collapsed');
-    }
-    // const sidebar = document.getElementById('sidebar');
-    // const contentWrapper = document.querySelector('.content-wrapper');
-
-    // function toggleSidebar() {
-    //   sidebar.classList.toggle('collapsed');
-    //   if (sidebar.classList.contains('collapsed')) {
-    //     contentWrapper.style.marginLeft = '60px';
-    //   } else {
-    //     contentWrapper.style.marginLeft = '200px';
-    //   }
-    // }
-
-
-    // const sidebar = document.getElementById('sidebar');
-    // const toggleBtn = sidebar.querySelector('.toggle-btn i');
-
-    // function toggleSidebar() {
-    //   sidebar.classList.toggle('collapsed');
-    // }
-
-  function toggleNotifications() {
-      const drawer = document.getElementById('notificationDrawer');
-      drawer.style.transform = drawer.style.transform === 'translateX(0%)' ? 'translateX(100%)' : 'translateX(0%)';
-  }
-</script>
-
-
-  <!-- Scripts -->
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap 5 JS -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- Bootstrap Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  @stack('scripts')
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

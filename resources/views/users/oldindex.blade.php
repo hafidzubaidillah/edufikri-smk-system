@@ -56,7 +56,7 @@
               class="btn btn-outline-secondary">
               <i class="bi bi-house-door-fill"></i>
             </a>
-            <a href="{{ route('register.form') }}"
+            <a href="{{ route('admin.register.form') }}"
               class="btn btn-primary">
               <i class="bi bi-person-plus-fill"></i> Register
             </a>

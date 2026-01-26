@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: smk-edufikri
+    runtime: php
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php artisan migrate --force
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs=
+      - key: APP_NAME
+        value: "SMK IT Ihsanul Fikri - Mungkid Magelang"
+      - key: LOG_LEVEL
+        value: error
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+
+databases:
+  - name: smk-edufikri-db
+    databaseName: edufikri
+    user: edufikri_user
+    region: singapore

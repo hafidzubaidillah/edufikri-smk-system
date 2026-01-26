@@ -68,6 +68,50 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully.');
     }
 
+    /**
+     * Show all users with their passwords for admin
+     */
+    public function showPasswords()
+    {
+        $users = User::with(['roles', 'learner', 'teacher'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+            
+        return view('admin.users.passwords', compact('users'));
+    }
+
+    /**
+     * Reset user password
+     */
+    public function resetPassword(Request $request, User $user)
+    {
+        $request->validate([
+            'new_password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user->update([
+            'password' => bcrypt($request->new_password),
+            'plain_password' => $request->new_password,
+        ]);
+
+        return redirect()->back()->with('success', "Password untuk {$user->name} berhasil direset!");
+    }
+
+    /**
+     * Generate random password for user
+     */
+    public function generatePassword(User $user)
+    {
+        $newPassword = 'pass' . rand(1000, 9999);
+        
+        $user->update([
+            'password' => bcrypt($newPassword),
+            'plain_password' => $newPassword,
+        ]);
+
+        return redirect()->back()->with('success', "Password baru untuk {$user->name}: {$newPassword}");
+    }
+
      /**
      * Send welcome email to selected users.
      */

@@ -1,6 +1,6 @@
-# 📚 Learner and Employee Management System (LEMS)
+# 📚 Educational Management System (EDUFIKRI)
 
-**LEMS** is a Laravel-based web platform that simplifies school administrative tasks through QR code attendance, role-based access, OTP-secured email registration, and targeted email announcements — all in a clean, responsive user interface.
+**EDUFIKRI** is a Laravel-based web platform that simplifies school administrative tasks through QR code attendance, role-based access, OTP-secured email registration, and targeted email announcements — all in a clean, responsive user interface.
 
 > "Build systems not just for grades, but for real-world impact."
 

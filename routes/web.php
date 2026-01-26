@@ -15,6 +15,19 @@ use App\Http\Controllers\ClassManagementController;
 
 /*
 |--------------------------------------------------------------------------
+| Health Check Route for Railway
+|--------------------------------------------------------------------------
+*/
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now(),
+        'service' => 'EDUFIKRI System'
+    ], 200);
+});
+
+/*
+|--------------------------------------------------------------------------
 | Public / Guest Routes
 |--------------------------------------------------------------------------
 */

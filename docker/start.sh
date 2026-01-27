@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "Starting Laravel application..."
 
@@ -17,7 +18,7 @@ echo "Routes cached"
 echo "Starting services..."
 
 # Start PHP-FPM in background
-php-fpm -D
+php-fpm &
 
 # Start Nginx in foreground
-nginx -g "daemon off;"
+exec nginx -g "daemon off;"

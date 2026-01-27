@@ -37,8 +37,9 @@ COPY docker/nginx.conf /etc/nginx/sites-available/default
 # Expose port 80
 EXPOSE 80
 
-# Start script
-COPY docker/start.sh /start.sh
-RUN chmod +x /start.sh
-
-CMD ["/start.sh"]
+# Simple startup command
+CMD php artisan migrate --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php-fpm & \
+    nginx -g "daemon off;"

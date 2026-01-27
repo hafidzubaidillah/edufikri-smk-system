@@ -15,15 +15,26 @@ SESSION_DRIVER=database
 CACHE_STORE=database
 QUEUE_CONNECTION=database
 
-MAIL_MAILER=log
-MAIL_HOST=127.0.0.1
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_FROM_ADDRESS=hello@example.com
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=hapisubed@gmail.com
+MAIL_PASSWORD=your_16_character_app_password_here
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=hapisubed@gmail.com
 MAIL_FROM_NAME=SMK IT Ihsanul Fikri
 
 LOG_CHANNEL=stack
 LOG_LEVEL=error
 
-PORT=${{PORT}}
+# Social Media Configuration
+SOCIAL_FACEBOOK=
+SOCIAL_INSTAGRAM=https://www.instagram.com/kxkl_ubed/
+SOCIAL_YOUTUBE=https://www.youtube.com/@hapisubed
+SOCIAL_WHATSAPP=https://wa.me/6282323084443
+
+# School Contact Information
+SCHOOL_PHONE=+62 293 123456
+SCHOOL_EMAIL=info@smkitihsanulfikri.sch.id
+SCHOOL_ADDRESS=Jl. Raya Mungkid, Magelang, Jawa Tengah 56511
+SCHOOL_WEBSITE=www.smkitihsanulfikri.sch.id

@@ -1,13 +1,19 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.php": {
-      "runtime": "vercel-php@0.6.0"
+  "builds": [
+    {
+      "src": "api/index.php",
+      "use": "vercel-php@0.6.0"
     },
-    "api/migrate.php": {
-      "runtime": "vercel-php@0.6.0"
+    {
+      "src": "api/migrate.php",
+      "use": "vercel-php@0.6.0"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/migrate",
@@ -24,6 +30,14 @@
     {
       "src": "/storage/(.*)",
       "dest": "/public/storage/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/public/favicon.ico"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/public/robots.txt"
     },
     {
       "src": "/(.*)",

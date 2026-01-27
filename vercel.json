@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "functions": {
     "api/*.php": {
       "runtime": "vercel-php@0.9.0"
@@ -13,6 +14,7 @@
     { "src": "/robots.txt", "dest": "/public/robots.txt" },
     { "src": "/(.*)", "dest": "/api/index.php" }
   ],
+  "outputDirectory": "public",
   "env": {
     "APP_NAME": "SMK IT Ihsanul Fikri - Mungkid Magelang",
     "APP_ENV": "production",

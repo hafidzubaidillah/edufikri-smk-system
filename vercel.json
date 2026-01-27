@@ -7,14 +7,40 @@
   },
   "routes": [
     {
+      "src": "/build/(.*)",
+      "dest": "/public/build/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/public/images/$1"
+    },
+    {
+      "src": "/storage/(.*)",
+      "dest": "/public/storage/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }
   ],
   "env": {
+    "APP_NAME": "SMK IT Ihsanul Fikri - Mungkid Magelang",
     "APP_ENV": "production",
     "APP_DEBUG": "false",
-    "APP_URL": "https://your-app.vercel.app",
-    "APP_KEY": "base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs="
+    "APP_KEY": "base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs=",
+    "APP_URL": "https://edufikri-smk-system.vercel.app",
+    "DB_CONNECTION": "mysql",
+    "SESSION_DRIVER": "array",
+    "CACHE_STORE": "array",
+    "QUEUE_CONNECTION": "sync",
+    "MAIL_MAILER": "smtp",
+    "MAIL_HOST": "smtp.gmail.com",
+    "MAIL_PORT": "587",
+    "MAIL_USERNAME": "hapisubed@gmail.com",
+    "MAIL_ENCRYPTION": "tls",
+    "MAIL_FROM_ADDRESS": "hapisubed@gmail.com",
+    "MAIL_FROM_NAME": "SMK IT Ihsanul Fikri",
+    "LOG_CHANNEL": "stderr",
+    "LOG_LEVEL": "error"
   }
 }

@@ -29,7 +29,7 @@
     "APP_DEBUG": "false",
     "APP_KEY": "base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs=",
     "APP_URL": "https://edufikri-smk-system.vercel.app",
-    "DB_CONNECTION": "mysql",
+    "DB_CONNECTION": "sqlite",
     "SESSION_DRIVER": "array",
     "CACHE_STORE": "array",
     "QUEUE_CONNECTION": "sync",

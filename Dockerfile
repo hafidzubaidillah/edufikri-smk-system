@@ -39,8 +39,13 @@ COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 # Expose port 80
 EXPOSE 80
 
-# Start Apache with Laravel setup
-CMD php artisan migrate --force && \
+# Start Apache with Laravel setup and debugging
+CMD echo "Starting Laravel application..." && \
+    php artisan migrate --force && \
+    echo "Migrations completed" && \
     php artisan config:cache && \
+    echo "Config cached" && \
     php artisan route:cache && \
+    echo "Routes cached" && \
+    echo "Starting Apache..." && \
     apache2-foreground

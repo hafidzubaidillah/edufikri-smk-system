@@ -1,5 +1,5 @@
-# Use PHP 8.2 with Apache
-FROM php:8.2-apache
+# Use PHP 8.2 CLI
+FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -30,17 +30,11 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Expose port 8000 (Laravel default)
+EXPOSE 8000
 
-# Copy Apache configuration
-COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Simple startup
+# Use Laravel's built-in server
 CMD php artisan migrate --force && \
     php artisan config:cache && \
     php artisan route:cache && \
-    apache2-foreground
+    php artisan serve --host=0.0.0.0 --port=8000

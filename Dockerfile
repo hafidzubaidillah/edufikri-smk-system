@@ -1,5 +1,5 @@
-# Use PHP 8.2 FPM
-FROM php:8.2-fpm
+# Use PHP 8.2 with Apache
+FROM php:8.2-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libzip-dev \
-    nginx \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer
@@ -31,15 +30,17 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Copy Nginx configuration
-COPY docker/nginx.conf /etc/nginx/sites-available/default
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
+
+# Copy Apache configuration
+COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Expose port 80
 EXPOSE 80
 
-# Simple startup command
+# Simple startup
 CMD php artisan migrate --force && \
     php artisan config:cache && \
     php artisan route:cache && \
-    php-fpm & \
-    nginx -g "daemon off;"
+    apache2-foreground

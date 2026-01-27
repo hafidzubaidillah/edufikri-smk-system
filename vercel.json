@@ -1,48 +1,17 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/index.php",
-      "use": "vercel-php@0.6.0"
-    },
-    {
-      "src": "api/migrate.php",
-      "use": "vercel-php@0.6.0"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
+  "functions": {
+    "api/*.php": {
+      "runtime": "vercel-php@0.7.0"
     }
-  ],
+  },
   "routes": [
-    {
-      "src": "/migrate",
-      "dest": "/api/migrate.php"
-    },
-    {
-      "src": "/build/(.*)",
-      "dest": "/public/build/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "/public/images/$1"
-    },
-    {
-      "src": "/storage/(.*)",
-      "dest": "/public/storage/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/public/favicon.ico"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "/public/robots.txt"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.php"
-    }
+    { "src": "/migrate", "dest": "/api/migrate.php" },
+    { "src": "/build/(.*)", "dest": "/public/build/$1" },
+    { "src": "/images/(.*)", "dest": "/public/images/$1" },
+    { "src": "/storage/(.*)", "dest": "/public/storage/$1" },
+    { "src": "/favicon.ico", "dest": "/public/favicon.ico" },
+    { "src": "/robots.txt", "dest": "/public/robots.txt" },
+    { "src": "/(.*)", "dest": "/api/index.php" }
   ],
   "env": {
     "APP_NAME": "SMK IT Ihsanul Fikri - Mungkid Magelang",

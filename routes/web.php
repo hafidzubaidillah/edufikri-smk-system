@@ -19,19 +19,7 @@ use App\Http\Controllers\ClassManagementController;
 |--------------------------------------------------------------------------
 */
 Route::get('/health', function () {
-    try {
-        // Basic health check without database dependency
-        return response()->json([
-            'status' => 'ok',
-            'timestamp' => now(),
-            'service' => 'EDUFIKRI System'
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => $e->getMessage()
-        ], 500);
-    }
+    return response('OK', 200)->header('Content-Type', 'text/plain');
 });
 
 /*

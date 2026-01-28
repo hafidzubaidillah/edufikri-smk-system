@@ -28,8 +28,16 @@ try {
     
     // Step 1: Run Migrations
     echo "<div class='info'>Step 1: Running migrations...</div>";
-    $kernel->call('migrate', ['--force' => true]);
-    echo "<div class='success'>✅ Migrations completed</div><br>";
+    try {
+        $kernel->call('migrate', ['--force' => true]);
+        echo "<div class='success'>✅ Migrations completed</div><br>";
+    } catch (Exception $e) {
+        if (strpos($e->getMessage(), 'already exists') !== false) {
+            echo "<div class='info'>ℹ️ Tables already exist, skipping migrations</div><br>";
+        } else {
+            echo "<div class='error'>❌ Migration error: " . $e->getMessage() . "</div><br>";
+        }
+    }
     
     // Step 2: Create Admin User
     echo "<div class='info'>Step 2: Creating admin user...</div>";

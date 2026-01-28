@@ -39,8 +39,15 @@ try {
             $app = require_once __DIR__ . '/../bootstrap/app.php';
             $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
             
-            // Run migrations
-            $kernel->call('migrate', ['--force' => true]);
+            // Run migrations (ignore if tables already exist)
+            try {
+                $kernel->call('migrate', ['--force' => true]);
+                error_log('Auto-setup: Migrations completed');
+            } catch (Exception $e) {
+                if (strpos($e->getMessage(), 'already exists') === false) {
+                    error_log('Auto-setup migration error: ' . $e->getMessage());
+                }
+            }
             
             // Create admin user
             $admin = \App\Models\User::firstOrCreate([
@@ -53,7 +60,7 @@ try {
                 'plain_password' => 'admin123'
             ]);
             
-            error_log('Auto-setup completed: Database and admin user created');
+            error_log('Auto-setup completed: Database and admin user ready');
         } catch (Exception $e) {
             error_log('Auto-setup failed: ' . $e->getMessage());
         }

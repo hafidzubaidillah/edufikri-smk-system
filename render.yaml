@@ -1,32 +1,79 @@
 services:
   - type: web
-    name: smk-edufikri
-    runtime: php
+    name: edufikri-smk-system
+    env: php
+    plan: free
+    region: oregon
     buildCommand: |
-      composer install --no-dev --optimize-autoloader
-      php artisan migrate --force
+      composer install --no-dev --optimize-autoloader --no-interaction
+      npm ci --only=production
+      npm run build
       php artisan config:cache
       php artisan route:cache
       php artisan view:cache
-    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    startCommand: |
+      php artisan migrate --force
+      php artisan db:seed --class=ProductionSeeder --force
+      php artisan serve --host=0.0.0.0 --port=$PORT
+    healthCheckPath: /
     envVars:
+      - key: APP_NAME
+        value: "SMK IT Ihsanul Fikri - Mungkid Magelang"
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
       - key: APP_KEY
         value: base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs=
-      - key: APP_NAME
-        value: "SMK IT Ihsanul Fikri - Mungkid Magelang"
+      - key: LOG_CHANNEL
+        value: stderr
       - key: LOG_LEVEL
         value: error
       - key: SESSION_DRIVER
         value: database
-      - key: CACHE_STORE
+      - key: CACHE_DRIVER
         value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: edufikri-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: edufikri-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: edufikri-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: edufikri-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: edufikri-db
+          property: password
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USERNAME
+        value: hapisubed@gmail.com
+      - key: MAIL_ENCRYPTION
+        value: tls
+      - key: MAIL_FROM_ADDRESS
+        value: hapisubed@gmail.com
+      - key: MAIL_FROM_NAME
+        value: "SMK IT Ihsanul Fikri"
 
 databases:
-  - name: smk-edufikri-db
-    databaseName: edufikri
+  - name: edufikri-db
+    databaseName: edufikri_smk_system
     user: edufikri_user
-    region: singapore
+    plan: free

@@ -14,19 +14,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create roles
-        Role::create(['name' => 'admin', 'guard_name' => 'web']);
-        Role::create(['name' => 'employee', 'guard_name' => 'web']);
-        Role::create(['name' => 'learner', 'guard_name' => 'web']);
+        // For production, only run essential seeders
+        if (app()->environment('production')) {
+            $this->call(ProductionSeeder::class);
+        } else {
+            // Development seeders
+            // Create roles
+            Role::create(['name' => 'admin', 'guard_name' => 'web']);
+            Role::create(['name' => 'employee', 'guard_name' => 'web']);
+            Role::create(['name' => 'learner', 'guard_name' => 'web']);
 
-        // User::factory(10)->create();
+            // User::factory(10)->create();
 
-        $user = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-        
-        // Assign admin role
-        $user->assignRole('admin');
+            $user = User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+            ]);
+            
+            // Assign admin role
+            $user->assignRole('admin');
+        }
     }
 }

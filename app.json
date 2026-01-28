@@ -1,0 +1,51 @@
+{
+  "name": "SMK IT Ihsanul Fikri - EDUFIKRI System",
+  "description": "Sistem Manajemen Sekolah untuk SMK IT Ihsanul Fikri Mungkid Magelang",
+  "keywords": ["laravel", "php", "education", "school-management"],
+  "website": "https://smkitihsanulfikri.sch.id",
+  "repository": "https://github.com/hafidzubaidillah/edufikri-smk-system",
+  "logo": "https://laravel.com/img/logomark.min.svg",
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "php artisan migrate --force && php artisan db:seed --force"
+  },
+  "env": {
+    "APP_NAME": {
+      "description": "Application name",
+      "value": "SMK IT Ihsanul Fikri - Mungkid Magelang"
+    },
+    "APP_ENV": {
+      "description": "Application environment",
+      "value": "production"
+    },
+    "APP_DEBUG": {
+      "description": "Enable debug mode",
+      "value": "false"
+    },
+    "APP_KEY": {
+      "description": "Application key for encryption",
+      "generator": "secret"
+    },
+    "DB_CONNECTION": {
+      "description": "Database connection type",
+      "value": "pgsql"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    "heroku-postgresql:essential-0"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/php"
+    }
+  ]
+}

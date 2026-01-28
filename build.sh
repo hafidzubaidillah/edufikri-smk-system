@@ -1,19 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Build script for Render deployment
 
-echo "Building Laravel for Vercel..."
+echo "🚀 Starting build process..."
 
-# Install Composer dependencies
+# Install PHP dependencies
+echo "📦 Installing Composer dependencies..."
 composer install --no-dev --optimize-autoloader --no-interaction
 
-# Install Node dependencies
-npm ci
+# Install Node dependencies and build assets
+echo "📦 Installing NPM dependencies..."
+npm ci --only=production
 
-# Build assets
+echo "🏗️ Building assets..."
 npm run build
 
-# Clear Laravel caches
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
+# Laravel optimizations
+echo "⚡ Optimizing Laravel..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
-echo "Build completed successfully!"
+echo "✅ Build completed successfully!"

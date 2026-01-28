@@ -1,23 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Start script for Render deployment
 
-echo "Starting Laravel application with Apache"
+echo "🚀 Starting application..."
 
-# Run migrations
+# Run database migrations
+echo "📊 Running database migrations..."
 php artisan migrate --force
 
-# Clear and cache config
-php artisan config:clear
+# Seed database with admin user
+echo "🌱 Seeding database..."
+php artisan db:seed --class=ProductionSeeder --force
+
+# Clear and cache config for production
+echo "⚡ Optimizing for production..."
 php artisan config:cache
-
-# Clear and cache routes
-php artisan route:clear
 php artisan route:cache
+php artisan view:cache
 
-# Clear view cache
-php artisan view:clear
-
-# Create storage link if it doesn't exist
-php artisan storage:link
-
-# Start Apache in foreground
-apache2-foreground
+# Start the server
+echo "🌐 Starting web server..."
+php artisan serve --host=0.0.0.0 --port=$PORT

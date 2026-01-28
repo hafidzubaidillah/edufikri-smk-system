@@ -33,6 +33,30 @@ try {
     if (!file_exists('/tmp/database.sqlite')) {
         @touch('/tmp/database.sqlite');
         @chmod('/tmp/database.sqlite', 0666);
+        
+        // Auto-setup database on first access
+        try {
+            $app = require_once __DIR__ . '/../bootstrap/app.php';
+            $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+            
+            // Run migrations
+            $kernel->call('migrate', ['--force' => true]);
+            
+            // Create admin user
+            $admin = \App\Models\User::firstOrCreate([
+                'email' => 'admin@smkitihsanulfikri.sch.id'
+            ], [
+                'name' => 'Administrator',
+                'email' => 'admin@smkitihsanulfikri.sch.id',
+                'password' => bcrypt('admin123'),
+                'email_verified_at' => now(),
+                'plain_password' => 'admin123'
+            ]);
+            
+            error_log('Auto-setup completed: Database and admin user created');
+        } catch (Exception $e) {
+            error_log('Auto-setup failed: ' . $e->getMessage());
+        }
     }
     
     // Ensure storage directories exist in /tmp (ephemeral filesystem)

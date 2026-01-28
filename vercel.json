@@ -8,6 +8,10 @@
   },
   "routes": [
     {
+      "src": "/setup",
+      "dest": "/api/setup.php"
+    },
+    {
       "src": "/test-login",
       "dest": "/api/test-login.php"
     },

@@ -13,26 +13,26 @@ try {
     $_ENV['APP_ENV'] = $_ENV['APP_ENV'] ?? 'production';
     $_ENV['APP_DEBUG'] = $_ENV['APP_DEBUG'] ?? 'false';
     
-    // Database Configuration
-    // Priority: Vercel Postgres > Environment Variables > SQLite fallback
-    if (isset($_ENV['POSTGRES_URL']) || isset($_ENV['POSTGRES_DATABASE'])) {
-        // Vercel Postgres is available
-        $_ENV['DB_CONNECTION'] = 'pgsql';
-        
-        // Vercel provides POSTGRES_URL in format: postgres://user:pass@host:port/db
-        if (isset($_ENV['POSTGRES_URL'])) {
-            $_ENV['DB_URL'] = $_ENV['POSTGRES_URL'];
-        }
-    } elseif (!isset($_ENV['DB_CONNECTION']) || $_ENV['DB_CONNECTION'] === 'sqlite') {
-        // Fallback to SQLite (ephemeral - will reset on cold start)
-        $_ENV['DB_CONNECTION'] = 'sqlite';
-        $_ENV['DB_DATABASE'] = '/tmp/database.sqlite';
-        
-        // Create SQLite database if it doesn't exist
-        if (!file_exists('/tmp/database.sqlite')) {
-            @touch('/tmp/database.sqlite');
-            @chmod('/tmp/database.sqlite', 0666);
-        }
+    // Database Configuration - FORCE SQLite for Vercel
+    $_ENV['DB_CONNECTION'] = 'sqlite';
+    $_ENV['DB_DATABASE'] = '/tmp/database.sqlite';
+    $_ENV['DB_HOST'] = '';
+    $_ENV['DB_PORT'] = '';
+    $_ENV['DB_USERNAME'] = '';
+    $_ENV['DB_PASSWORD'] = '';
+    
+    // Also set via putenv for compatibility
+    putenv('DB_CONNECTION=sqlite');
+    putenv('DB_DATABASE=/tmp/database.sqlite');
+    putenv('DB_HOST=');
+    putenv('DB_PORT=');
+    putenv('DB_USERNAME=');
+    putenv('DB_PASSWORD=');
+    
+    // Create SQLite database if it doesn't exist
+    if (!file_exists('/tmp/database.sqlite')) {
+        @touch('/tmp/database.sqlite');
+        @chmod('/tmp/database.sqlite', 0666);
     }
     
     // Ensure storage directories exist in /tmp (ephemeral filesystem)

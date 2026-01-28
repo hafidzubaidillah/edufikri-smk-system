@@ -44,5 +44,24 @@
       "dest": "/api/index.php"
     }
   ],
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "env": {
+    "APP_NAME": "SMK IT Ihsanul Fikri - Mungkid Magelang",
+    "APP_ENV": "production",
+    "APP_DEBUG": "true",
+    "APP_KEY": "base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs=",
+    "APP_URL": "https://edufikri-smk-system.vercel.app",
+    "DB_CONNECTION": "sqlite",
+    "DB_DATABASE": "/tmp/database.sqlite",
+    "DB_HOST": "",
+    "DB_PORT": "",
+    "DB_USERNAME": "",
+    "DB_PASSWORD": "",
+    "SESSION_DRIVER": "array",
+    "CACHE_STORE": "array",
+    "QUEUE_CONNECTION": "sync",
+    "MAIL_MAILER": "log",
+    "LOG_CHANNEL": "stderr",
+    "LOG_LEVEL": "debug"
+  }
 }

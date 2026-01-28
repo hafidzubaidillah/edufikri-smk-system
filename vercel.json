@@ -8,6 +8,10 @@
   },
   "routes": [
     {
+      "src": "/seed",
+      "dest": "/api/seed.php"
+    },
+    {
       "src": "/debug",
       "dest": "/api/debug.php"
     },

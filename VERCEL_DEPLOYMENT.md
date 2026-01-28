@@ -26,7 +26,7 @@ APP_DEBUG=false
 APP_KEY=base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs=
 APP_URL=https://your-project-name.vercel.app
 DB_CONNECTION=sqlite
-SESSION_DRIVER=array
+SESSION_DRIVER=cookie
 CACHE_STORE=array
 QUEUE_CONNECTION=sync
 MAIL_MAILER=smtp

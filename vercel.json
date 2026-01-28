@@ -2,38 +2,43 @@
   "version": 2,
   "functions": {
     "api/*.php": {
-      "runtime": "vercel-php@0.9.0"
+      "runtime": "vercel-php@0.9.0",
+      "maxDuration": 30
     }
   },
   "routes": [
-    { "src": "/debug", "dest": "/api/debug.php" },
-    { "src": "/migrate", "dest": "/api/migrate.php" },
-    { "src": "/build/(.*)", "dest": "/public/build/$1" },
-    { "src": "/images/(.*)", "dest": "/public/images/$1" },
-    { "src": "/storage/(.*)", "dest": "/public/storage/$1" },
-    { "src": "/favicon.ico", "dest": "/public/favicon.ico" },
-    { "src": "/robots.txt", "dest": "/public/robots.txt" },
-    { "src": "/(.*)", "dest": "/api/index.php" }
+    {
+      "src": "/debug",
+      "dest": "/api/debug.php"
+    },
+    {
+      "src": "/migrate",
+      "dest": "/api/migrate.php"
+    },
+    {
+      "src": "/build/(.*)",
+      "dest": "/public/build/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/public/images/$1"
+    },
+    {
+      "src": "/storage/(.*)",
+      "dest": "/public/storage/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/public/favicon.ico"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/public/robots.txt"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
+    }
   ],
-  "outputDirectory": "public",
-  "env": {
-    "APP_NAME": "SMK IT Ihsanul Fikri - Mungkid Magelang",
-    "APP_ENV": "production",
-    "APP_DEBUG": "false",
-    "APP_KEY": "base64:juQp72jOkqQ13Su+Dt02QPSIcj18elMVpqk+xxC4bEs=",
-    "APP_URL": "https://edufikri-smk-system.vercel.app",
-    "DB_CONNECTION": "sqlite",
-    "SESSION_DRIVER": "array",
-    "CACHE_STORE": "array",
-    "QUEUE_CONNECTION": "sync",
-    "MAIL_MAILER": "smtp",
-    "MAIL_HOST": "smtp.gmail.com",
-    "MAIL_PORT": "587",
-    "MAIL_USERNAME": "hapisubed@gmail.com",
-    "MAIL_ENCRYPTION": "tls",
-    "MAIL_FROM_ADDRESS": "hapisubed@gmail.com",
-    "MAIL_FROM_NAME": "SMK IT Ihsanul Fikri",
-    "LOG_CHANNEL": "stderr",
-    "LOG_LEVEL": "error"
-  }
+  "outputDirectory": "public"
 }
